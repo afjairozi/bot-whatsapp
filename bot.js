@@ -114,6 +114,15 @@ async function startBot() {
 
       const type = getContentType(m.message);
       let body = '';
+      if (type === 'conversation' && msg.message.conversation.startsWith(prefix)) {
+      const command = msg.message.conversation.slice(prefix.length).trim();
+
+      // Abaikan jika cuma '.'
+      if (!command) return;
+
+      if (command === 'ping') {
+      await naze.sendMessage(sender, { text: 'Pong!' });
+      
       if (type === 'conversation') body = m.message.conversation;
       else if (type === 'extendedTextMessage') body = m.message.extendedTextMessage.text;
       else if (type === 'imageMessage') body = m.message.imageMessage.caption || '';
@@ -202,3 +211,4 @@ startBot().catch((err) => {
 
 process.on('uncaughtException', (err) => console.error('Uncaught Exception:', err));
 process.on('unhandledRejection', (err) => console.error('Unhandled Rejection:', err));
+
